@@ -17,4 +17,5 @@ When you spawn a subagent, set its `model` to match the task by these rules. Do 
 - Commit and push directly to `main`. No feature branches or pull requests unless asked.
 - Never commit secrets or client data. Remove them before adding a kit.
 - Keep the root README kit table in sync when you add, rename or remove a kit.
+- When `kits/smoliv-relay/ticket-to-pr-deck.html` changes, republish its Artifact to the same link (https://claude.ai/artifact/3EpcEJz2iXRxZchVMoP425) so the README links stay current.
 - `kits/*/CLAUDE.md.template` files are kit content for other repos, not rules for this repo.

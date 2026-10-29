@@ -44,7 +44,7 @@ It copies `CLAUDE.md` (from the template), `.claude/` and `skills-lock.json`, an
 | `.claude/skills/` | grilling, sync-issue, plan-issue, preview, address-review, open-pr, pr-desc, unslop, optimize-skill |
 | `.claude/commands/implement-plan.md` | `/implement-plan <plan file>` |
 | `examples/review-prompt.md` | A review prompt with issue-specific checks |
-| `ticket-to-pr-deck.html` | The talk deck, 14 slides. Open it in a browser: arrow keys to move, N for speaker notes, F for full screen |
+| `ticket-to-pr-deck.html` | The talk deck, 14 slides. [View it online](https://claude.ai/artifact/3EpcEJz2iXRxZchVMoP425) (private; ask the owner for access) or open the file in a browser. Click the slide or use the arrow keys to move, N for speaker notes, F for full screen |
 
 ## One example prompt per step
 

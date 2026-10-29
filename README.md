@@ -8,7 +8,7 @@ A collection of AI kits from Agility: kits from client projects, my practice kit
 
 | Kit | Source | What it is |
 | --- | --- | --- |
-| [`smoliv-relay`](kits/smoliv-relay/) | Project smoliv | Ticket to pull request with human gates. Claude Code skills and one command for a 7-step flow: grill, sync issue, plan, implement, review, address review, open PR. |
+| [`smoliv-relay`](kits/smoliv-relay/) | Project smoliv | Ticket to pull request with human gates. Claude Code skills and one command for a 7-step flow: grill, sync issue, plan, implement, review, address review, open PR. [Talk deck](https://claude.ai/artifact/3EpcEJz2iXRxZchVMoP425). |
 
 ## Adding a kit
 
