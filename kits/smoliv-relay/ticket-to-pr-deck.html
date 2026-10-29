@@ -363,7 +363,7 @@ x-shape[kind=diamond]{transform:rotate(45deg) scale(.72)}
 </section>
 </div>
 <div id="notes"></div>
-<div id="bar"><button id="prev" aria-label="Previous slide">◀</button><span id="count"></span><button id="next" aria-label="Next slide">▶</button><button id="toggleNotes">Notes (N)</button><span>← → to move · F for full screen</span></div>
+<div id="bar"><button id="prev" aria-label="Previous slide">◀</button><span id="count"></span><button id="next" aria-label="Next slide">▶</button><button id="toggleNotes">Notes (N)</button><span>Click slide or ← → to move · F for full screen</span></div>
 <script>
 const slides=[...document.querySelectorAll('#stage > section')];
 let i=0;
@@ -376,7 +376,9 @@ document.getElementById('prev').onclick=()=>show(i-1);
 document.getElementById('next').onclick=()=>show(i+1);
 document.getElementById('toggleNotes').onclick=()=>{notes.style.display=notes.style.display==='block'?'none':'block'};
 addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown')show(i+1);if(e.key==='ArrowLeft'||e.key==='PageUp')show(i-1);if(e.key==='n'||e.key==='N')document.getElementById('toggleNotes').click();if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen().catch(()=>{})}});
-addEventListener('resize',fit);fit();show(i);
+addEventListener('click',e=>{if(e.target.closest('a,button,#bar,#notes'))return;focus();show(e.clientX<innerWidth/3?i-1:i+1)});
+addEventListener('pointerdown',()=>focus());
+addEventListener('resize',fit);fit();show(i);focus();
 </script>
 </body>
 </html>
