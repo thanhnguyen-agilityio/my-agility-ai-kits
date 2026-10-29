@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Kit: Ticket to Pull Request</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500..900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+html,body{margin:0;height:100%;background:#0b1117;overflow:hidden;font-family:'IBM Plex Sans',Arial,sans-serif}
+#stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:center}
+section{position:absolute;inset:0;width:1920px;height:1080px;box-sizing:border-box;display:none}
+section.on{display:flex}
+section[style*="display:grid"].on{display:grid}
+section *{box-sizing:border-box}
+h1,h2,h3,p{margin:0}
+aside{display:none}
+table{border-collapse:collapse;width:100%}
+th,td{text-align:left;padding:.35em .6em;border-bottom:1px solid #cfd7df;vertical-align:top}
+th{font-weight:600;border-bottom:2px solid #15202b}
+x-shape{display:block;flex:none}
+x-shape[kind=diamond]{transform:rotate(45deg) scale(.72)}
+.x-icon{display:inline-block} .x-icon svg{width:100%;height:100%}
+#bar{position:fixed;left:0;right:0;bottom:0;display:flex;gap:12px;align-items:center;justify-content:center;padding:8px;font:13px 'IBM Plex Mono',monospace;color:#94a3b2;background:rgba(11,17,23,.85)}
+#bar button{background:none;border:1px solid #2a3846;color:#e4eaf0;border-radius:4px;padding:4px 10px;cursor:pointer;font:inherit}
+#notes{position:fixed;left:16px;right:16px;bottom:48px;max-height:30vh;overflow:auto;background:#16202a;color:#e4eaf0;border:1px solid #2a3846;border-radius:8px;padding:12px 16px;font-size:15px;line-height:1.5;display:none}
+</style>
+</head>
+<body>
+<div id="stage">
+<section id="cover" data-transition="fade" style="background:#15202B;color:#EEF1F4;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:3px;color:#5FCF8C">AGILITY · AI KIT</p>
+<div style="display:flex;flex-direction:column;gap:32px">
+<h1 style="font-family:'Archivo', Arial, sans-serif;font-size:150px;font-weight:900;line-height:1;color:#EEF1F4">Ticket to pull request<br><span style="color:#5FCF8C">in seven skills</span></h1>
+<p style="font-size:32px;line-height:1.4;color:#BFCAD6;width:1200px">The Claude Code workflow we ran on every ticket of a .NET integration project, and a kit you can copy into your own repo.</p>
+</div>
+<p style="font-size:24px;color:#94A3B2">October 2026</p>
+<aside>This talk is only about the AI workflow. It comes from a .NET integration project, but nothing here depends on the client or the stack. At the end you get a kit: seven skills, one command and a README.</aside>
+</section>
+<section id="why" data-transition="fade" style="display:flex; flex-direction:column; gap:56px; padding:128px 128px 160px; background:#eef1f4">
+  <div style="display:flex; flex-direction:column; gap:16px">
+    <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; letter-spacing:3px; color:#1f8a4c">WHY A REPEATABLE FLOW</p>
+    <h2 style="font-family:Archivo, Arial, sans-serif; font-size:72px; font-weight:800; line-height:1.1; color:#15202b">Three constraints, one answer</h2>
+  </div>
+  <div style="display:flex; flex-direction:row; gap:24px">
+    <div style="display:flex; flex-direction:column; gap:12px; flex:1; padding:40px; background:#f9fafb; border-radius:12px">
+      <span class="x-icon" style="width:56px; height:56px; color:#b26b00"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+      <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:36px; font-weight:600; line-height:1.2; color:#15202b">Slow answers</h3>
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:26px; line-height:1.4; color:#4a5868">Client replies took 2 to 3 days. We could not wait for every question.</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:12px; flex:1; padding:40px; background:#f9fafb; border-radius:12px">
+      <span class="x-icon" style="width:56px; height:56px; color:#b26b00"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>
+      <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:36px; font-weight:600; line-height:1.2; color:#15202b">Locked-down VDI</h3>
+      <p style="width:459px; font-family:'IBM Plex Sans', Arial, sans-serif; font-size:26px; line-height:1.4; color:#4a5868">All work ran on an Azure Virtual Desktop with limited permissions. The dev environment had to run in a dev container.</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:12px; flex:1; padding:40px; background:#f9fafb; border-radius:12px">
+      <span class="x-icon" style="width:56px; height:56px; color:#b26b00"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5a2 2 0 0 1 2-2h14v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/></svg></span>
+      <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:36px; font-weight:600; line-height:1.2; color:#15202b">Strict house rules</h3>
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:26px; line-height:1.4; color:#4a5868">A new codebase with rule files, analyzers and a reviewed contract.</p>
+    </div>
+  </div>
+  <div style="display:flex; flex-direction:row; gap:32px; align-items:baseline; padding:32px 0 0; border-top:3px solid #15202b">
+    <p style="font-family:Archivo, Arial, sans-serif; font-size:96px; font-weight:800; line-height:1; color:#1f8a4c">9 slices</p>
+    <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:32px; line-height:1.4; color:#4a5868">delivered in about 10 weeks, every one through the same seven steps.</p>
+  </div>
+  <div style="position:absolute; bottom:64px; left:128px; width:1664px; display:flex; flex-direction:row; justify-content:space-between">
+    <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; color:#6a7786">Agility · AI kit</p>
+    <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; color:#6a7786">2</p>
+  </div>
+  <aside>We worked on a locked-down Azure VDI with a dev container, had slow client answers and a codebase full of rules. A fixed flow meant the AI did the same careful steps every time, and we spent our own time on decisions.</aside>
+</section>
+<section id="pipeline" data-transition="fade" style="background:#F9FAFB;color:#15202B;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:64px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:3px;color:#1F8A4C">THE PIPELINE</p>
+<h2 style="font-family:'Archivo', Arial, sans-serif;font-size:72px;font-weight:800;line-height:1.1">Seven steps, four human gates</h2>
+</div>
+<div style="display:flex;align-items:flex-start">
+<div style="width:150px;display:flex;flex-direction:column;align-items:center;gap:12px"><div style="width:88px;height:88px;border-radius:50%;background:#1F8A4C;display:flex;align-items:center;justify-content:center"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:32px;font-weight:600;color:#F9FAFB">1</p></div><p style="font-size:24px;font-weight:600;text-align:center;line-height:1.2">Grill</p></div>
+<div style="flex:1;padding:42px 0px 0px 0px"><div style="height:4px;background:#9FB3C8"></div></div>
+<div style="width:110px;display:flex;flex-direction:column;align-items:center;gap:20px;padding:18px 0px 0px 0px"><x-shape kind="diamond" style="background:#2C56D6;width:52px;height:52px"></x-shape><p style="font-size:24px;font-weight:600;color:#2C56D6;text-align:center">Answer</p></div>
+<div style="flex:1;padding:42px 0px 0px 0px"><div style="height:4px;background:#9FB3C8"></div></div>
+<div style="width:150px;display:flex;flex-direction:column;align-items:center;gap:12px"><div style="width:88px;height:88px;border-radius:50%;background:#1F8A4C;display:flex;align-items:center;justify-content:center"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:32px;font-weight:600;color:#F9FAFB">2</p></div><p style="font-size:24px;font-weight:600;text-align:center;line-height:1.2">Sync issue</p></div>
+<div style="flex:1;padding:42px 0px 0px 0px"><div style="height:4px;background:#9FB3C8"></div></div>
+<div style="width:150px;display:flex;flex-direction:column;align-items:center;gap:12px"><div style="width:88px;height:88px;border-radius:50%;background:#1F8A4C;display:flex;align-items:center;justify-content:center"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:32px;font-weight:600;color:#F9FAFB">3</p></div><p style="font-size:24px;font-weight:600;text-align:center;line-height:1.2">Plan</p></div>
+<div style="flex:1;padding:42px 0px 0px 0px"><div style="height:4px;background:#9FB3C8"></div></div>
+<div style="width:110px;display:flex;flex-direction:column;align-items:center;gap:20px;padding:18px 0px 0px 0px"><x-shape kind="diamond" style="background:#DFE7FB;border:3px dashed #2C56D6;width:52px;height:52px"></x-shape><p style="font-size:24px;font-weight:600;color:#2C56D6;text-align:center">Settle</p></div>
+<div style="flex:1;padding:42px 0px 0px 0px"><div style="height:4px;background:#9FB3C8"></div></div>
+<div style="width:150px;display:flex;flex-direction:column;align-items:center;gap:12px"><div style="width:88px;height:88px;border-radius:50%;background:#1F8A4C;display:flex;align-items:center;justify-content:center"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:32px;font-weight:600;color:#F9FAFB">4</p></div><p style="font-size:24px;font-weight:600;text-align:center;line-height:1.2">Implement</p></div>
+<div style="flex:1;padding:42px 0px 0px 0px"><div style="height:4px;background:#9FB3C8"></div></div>
+<div style="width:110px;display:flex;flex-direction:column;align-items:center;gap:20px;padding:18px 0px 0px 0px"><x-shape kind="diamond" style="background:#DFE7FB;border:3px dashed #2C56D6;width:52px;height:52px"></x-shape><p style="font-size:24px;font-weight:600;color:#2C56D6;text-align:center">Test</p></div>
+<div style="flex:1;padding:42px 0px 0px 0px"><div style="height:4px;background:#9FB3C8"></div></div>
+<div style="width:150px;display:flex;flex-direction:column;align-items:center;gap:12px"><div style="width:88px;height:88px;border-radius:50%;background:#1F8A4C;display:flex;align-items:center;justify-content:center"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:32px;font-weight:600;color:#F9FAFB">5</p></div><p style="font-size:24px;font-weight:600;text-align:center;line-height:1.2">Review</p></div>
+<div style="flex:1;padding:42px 0px 0px 0px"><div style="height:4px;background:#9FB3C8"></div></div>
+<div style="width:150px;display:flex;flex-direction:column;align-items:center;gap:12px"><div style="width:88px;height:88px;border-radius:50%;background:#1F8A4C;display:flex;align-items:center;justify-content:center"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:32px;font-weight:600;color:#F9FAFB">6</p></div><p style="font-size:24px;font-weight:600;text-align:center;line-height:1.2">Fix review</p></div>
+<div style="flex:1;padding:42px 0px 0px 0px"><div style="height:4px;background:#9FB3C8"></div></div>
+<div style="width:110px;display:flex;flex-direction:column;align-items:center;gap:20px;padding:18px 0px 0px 0px"><x-shape kind="diamond" style="background:#DFE7FB;border:3px dashed #2C56D6;width:52px;height:52px"></x-shape><p style="font-size:24px;font-weight:600;color:#2C56D6;text-align:center">Approve</p></div>
+<div style="flex:1;padding:42px 0px 0px 0px"><div style="height:4px;background:#9FB3C8"></div></div>
+<div style="width:150px;display:flex;flex-direction:column;align-items:center;gap:12px"><div style="width:88px;height:88px;border-radius:50%;background:#1F8A4C;display:flex;align-items:center;justify-content:center"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:32px;font-weight:600;color:#F9FAFB">7</p></div><p style="font-size:24px;font-weight:600;text-align:center;line-height:1.2">Open PR</p></div>
+</div>
+<div style="display:flex;gap:48px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;border-left:6px solid #1F8A4C;padding:8px 0px 8px 24px"><h3 style="font-size:32px;font-weight:600;color:#1F6E3D">Green: the AI writes a file</h3><p style="font-size:28px;line-height:1.4;color:#4A5868">questions, plan, code and tests, review, reply, PR text</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;border-left:6px solid #2C56D6;padding:8px 0px 8px 24px"><h3 style="font-size:32px;font-weight:600;color:#2C56D6">Blue: a person decides</h3><p style="font-size:28px;line-height:1.4;color:#4A5868">Solid: always a person. Dashed: only because of our project’s setup (next slide).</p></div>
+</div>
+<div style="position:absolute;left:128px;bottom:64px;width:1664px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#6A7786">Agility · AI kit</p><p style="font-size:24px;color:#6A7786">3</p></div>
+<aside>This is the whole talk on one slide. Each green circle is a Claude Code skill that writes a file into the ticket’s folder, so the next step starts from text, not memory. Each blue diamond is where a person decides. Only Answer is always needed; the three dashed gates came from our project’s setup, and the next slide shows how they go away.</aside>
+</section>
+<section id="setups" data-transition="fade" style="background:#EEF1F4;color:#15202B;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:36px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:3px;color:#1F8A4C">REAL STAGE AND NEXT STAGE</p>
+<h2 style="font-family:'Archivo', Arial, sans-serif;font-size:72px;font-weight:800;line-height:1.1">Four gates on our project, one in good conditions</h2>
+</div>
+<div style="display:flex;align-items:flex-start;gap:16px">
+<div style="width:250px;display:flex;flex-direction:column;gap:4px;padding:8px 0px 0px 0px"><p style="font-size:28px;font-weight:600">Our project</p><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#2C56D6">4 gates</p></div>
+<div style="flex:1;display:flex;align-items:flex-start">
+<div style="width:96px;display:flex;flex-direction:column;align-items:center;gap:8px"><div style="width:56px;height:56px;border-radius:50%;background:#1F8A4C;display:flex;align-items:center;justify-content:center"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#F9FAFB">1</p></div></div>
+<div style="flex:1;padding:26px 0px 0px 0px"><div style="height:3px;background:#9FB3C8"></div></div>
+<div style="width:96px;display:flex;flex-direction:column;align-items:center;gap:8px;padding:10px 0px 0px 0px"><x-shape kind="diamond" style="background:#2C56D6;width:36px;height:36px"></x-shape><p style="font-size:24px;font-weight:600;color:#2C56D6">Answer</p></div>
+<div style="flex:1;padding:26px 0px 0px 0px"><div style="height:3px;background:#9FB3C8"></div></div>
+<div style="width:96px;display:flex;flex-direction:column;align-items:center;gap:8px"><div style="width:56px;height:56px;border-radius:50%;background:#1F8A4C;display:flex;align-items:center;justify-content:center"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#F9FAFB">2</p></div></div>
+<div style="flex:1;padding:26px 0px 0px 0px"><div style="height:3px;background:#9FB3C8"></div></div>
+<div style="width:96px;display:flex;flex-direction:column;align-items:center;gap:8px"><div style="width:56px;height:56px;border-radius:50%;background:#1F8A4C;display:flex;align-items:center;justify-content:center"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#F9FAFB">3</p></div></div>
+<div style="flex:1;padding:26px 0px 0px 0px"><div style="height:3px;background:#9FB3C8"></div></div>
+<div style="width:96px;display:flex;flex-direction:column;align-items:center;gap:8px;padding:10px 0px 0px 0px"><x-shape kind="diamond" style="background:#DFE7FB;border:3px dashed #2C56D6;width:36px;height:36px"></x-shape><p style="font-size:24px;font-weight:600;color:#2C56D6">Settle</p></div>
+<div style="flex:1;padding:26px 0px 0px 0px"><div style="height:3px;background:#9FB3C8"></div></div>
+<div style="width:96px;display:flex;flex-direction:column;align-items:center;gap:8px"><div style="width:56px;height:56px;border-radius:50%;background:#1F8A4C;display:flex;align-items:center;justify-content:center"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#F9FAFB">4</p></div></div>
+<div style="flex:1;padding:26px 0px 0px 0px"><div style="height:3px;background:#9FB3C8"></div></div>
+<div style="width:96px;display:flex;flex-direction:column;align-items:center;gap:8px;padding:10px 0px 0px 0px"><x-shape kind="diamond" style="background:#DFE7FB;border:3px dashed #2C56D6;width:36px;height:36px"></x-shape><p style="font-size:24px;font-weight:600;color:#2C56D6">Test</p></div>
+<div style="flex:1;padding:26px 0px 0px 0px"><div style="height:3px;background:#9FB3C8"></div></div>
+<div style="width:96px;display:flex;flex-direction:column;align-items:center;gap:8px"><div style="width:56px;height:56px;border-radius:50%;background:#1F8A4C;display:flex;align-items:center;justify-content:center"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#F9FAFB">5</p></div></div>
+<div style="flex:1;padding:26px 0px 0px 0px"><div style="height:3px;background:#9FB3C8"></div></div>
+<div style="width:96px;display:flex;flex-direction:column;align-items:center;gap:8px"><div style="width:56px;height:56px;border-radius:50%;background:#1F8A4C;display:flex;align-items:center;justify-content:center"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#F9FAFB">6</p></div></div>
+<div style="flex:1;padding:26px 0px 0px 0px"><div style="height:3px;background:#9FB3C8"></div></div>
+<div style="width:96px;display:flex;flex-direction:column;align-items:center;gap:8px;padding:10px 0px 0px 0px"><x-shape kind="diamond" style="background:#DFE7FB;border:3px dashed #2C56D6;width:36px;height:36px"></x-shape><p style="font-size:24px;font-weight:600;color:#2C56D6">Approve</p></div>
+<div style="flex:1;padding:26px 0px 0px 0px"><div style="height:3px;background:#9FB3C8"></div></div>
+<div style="width:96px;display:flex;flex-direction:column;align-items:center;gap:8px"><div style="width:56px;height:56px;border-radius:50%;background:#1F8A4C;display:flex;align-items:center;justify-content:center"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#F9FAFB">7</p></div></div>
+</div>
+</div>
+<div style="display:flex;align-items:flex-start;gap:16px">
+<div style="width:250px;display:flex;flex-direction:column;gap:4px;padding:8px 0px 0px 0px"><p style="font-size:28px;font-weight:600">Good conditions</p><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#1F8A4C">1 gate</p></div>
+<div style="flex:1;display:flex;align-items:flex-start">
+<div style="width:96px;display:flex;flex-direction:column;align-items:center;gap:8px"><div style="width:56px;height:56px;border-radius:50%;background:#1F8A4C;display:flex;align-items:center;justify-content:center"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#F9FAFB">1</p></div></div>
+<div style="flex:1;padding:26px 0px 0px 0px"><div style="height:3px;background:#9FB3C8"></div></div>
+<div style="width:96px;display:flex;flex-direction:column;align-items:center;gap:8px;padding:10px 0px 0px 0px"><x-shape kind="diamond" style="background:#2C56D6;width:36px;height:36px"></x-shape><p style="font-size:24px;font-weight:600;color:#2C56D6">Answer</p></div>
+<div style="flex:1;padding:26px 0px 0px 0px"><div style="height:3px;background:#9FB3C8"></div></div>
+<div style="width:96px;display:flex;flex-direction:column;align-items:center;gap:8px"><div style="width:56px;height:56px;border-radius:50%;background:#1F8A4C;display:flex;align-items:center;justify-content:center"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#F9FAFB">2</p></div></div>
+<div style="flex:1;padding:26px 0px 0px 0px"><div style="height:3px;background:#9FB3C8"></div></div>
+<div style="width:96px;display:flex;flex-direction:column;align-items:center;gap:8px"><div style="width:56px;height:56px;border-radius:50%;background:#1F8A4C;display:flex;align-items:center;justify-content:center"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#F9FAFB">3</p></div></div>
+<div style="flex:1;padding:26px 0px 0px 0px"><div style="height:3px;background:#9FB3C8"></div></div>
+<div style="width:96px;display:flex;flex-direction:column;align-items:center;gap:8px"><div style="width:56px;height:56px;border-radius:50%;background:#1F8A4C;display:flex;align-items:center;justify-content:center"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#F9FAFB">4</p></div></div>
+<div style="flex:1;padding:26px 0px 0px 0px"><div style="height:3px;background:#9FB3C8"></div></div>
+<div style="width:96px;display:flex;flex-direction:column;align-items:center;gap:8px"><div style="width:56px;height:56px;border-radius:50%;background:#1F8A4C;display:flex;align-items:center;justify-content:center"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#F9FAFB">5</p></div></div>
+<div style="flex:1;padding:26px 0px 0px 0px"><div style="height:3px;background:#9FB3C8"></div></div>
+<div style="width:96px;display:flex;flex-direction:column;align-items:center;gap:8px"><div style="width:56px;height:56px;border-radius:50%;background:#1F8A4C;display:flex;align-items:center;justify-content:center"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#F9FAFB">6</p></div></div>
+<div style="flex:1;padding:26px 0px 0px 0px"><div style="height:3px;background:#9FB3C8"></div></div>
+<div style="width:96px;display:flex;flex-direction:column;align-items:center;gap:8px"><div style="width:56px;height:56px;border-radius:50%;background:#1F8A4C;display:flex;align-items:center;justify-content:center"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#F9FAFB">7</p></div></div>
+</div>
+</div>
+<div style="display:flex;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#F9FAFB;border-top:4px dashed #2C56D6;border-radius:10px;padding:24px"><h3 style="font-size:28px;font-weight:600;color:#2C56D6">Settle goes away</h3><p style="font-size:24px;line-height:1.4;color:#4A5868">with fast feedback, or authority to decide. Here, answers took 2 to 3 days.</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#F9FAFB;border-top:4px dashed #2C56D6;border-radius:10px;padding:24px"><h3 style="font-size:28px;font-weight:600;color:#2C56D6">Test goes away</h3><p style="font-size:24px;line-height:1.4;color:#4A5868">when Claude can build and run tests. Here: Azure VDI, limited permissions, a slow dev container Claude couldn’t use.</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#F9FAFB;border-top:4px dashed #2C56D6;border-radius:10px;padding:24px"><h3 style="font-size:28px;font-weight:600;color:#2C56D6">Approve goes away</h3><p style="font-size:24px;line-height:1.4;color:#4A5868">when you own the PR and the contract. Here, the client did.</p></div>
+</div>
+<p style="font-size:24px;color:#4A5868">Teams may still review the final PR. Answer is the only required gate.</p>
+<div style="position:absolute;left:128px;bottom:64px;width:1664px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#6A7786">Agility · AI kit</p><p style="font-size:24px;color:#6A7786">4</p></div>
+<aside>The top track is the real stage on our project. Three of the four gates came from the setup, not from the workflow. All work ran on an Azure Virtual Desktop with limited permissions, and the dev environment had to run in a slow dev container that Claude could not run in. So we used two VS Code windows: window one in the dev container to build, run unit tests and call the API through .http files; window two where Claude wrote code but could not build or run it. A person carried test results back and forth. Client answers took two to three days, so a person settled conflicts; and the client owned the PRs, so a person approved any change a caller would notice. In good conditions, with fast feedback or authority to decide, a machine Claude can build on, and ownership of the PR, the same seven steps need only one human step: answering the grill questions.</aside>
+</section>
+<section id="grill" data-transition="fade" style="background:#EEF1F4;color:#15202B;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:3px;color:#1F8A4C">STEP 1 · GRILL · writes questions.md</p>
+<h2 style="font-family:'Archivo', Arial, sans-serif;font-size:72px;font-weight:800;line-height:1.1">Ask every open question before planning</h2>
+</div>
+<div style="display:flex;gap:48px">
+<div style="flex:1;display:flex;flex-direction:column;gap:24px">
+<p style="font-size:30px;line-height:1.4"><b>Rounds, not a dump.</b> Each round asks only what can be answered now.</p>
+<p style="font-size:30px;line-height:1.4"><b>A recommended answer on every question,</b> worded so “yes” accepts it.</p>
+<p style="font-size:30px;line-height:1.4"><b>Facts are the AI’s job.</b> It looks them up; you only make decisions.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#F9FAFB;border-left:6px solid #1F8A4C;border-radius:12px;padding:40px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#6A7786">EXAMPLE QUESTION</p>
+<h3 style="font-size:34px;font-weight:600;line-height:1.3">“Classifications” could mean managing the label list, or applying a label to a file. Which one?</h3>
+<p style="font-size:28px;line-height:1.4;color:#1F6E3D"><b>Recommended:</b> applying a label, plus a read-only list of labels.</p>
+</div>
+</div>
+<p style="font-size:28px;color:#2C56D6;font-weight:600">You decide: which answers to accept, and which questions go to the client.</p>
+<div style="position:absolute;left:128px;bottom:64px;width:1664px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#6A7786">Agility · AI kit</p><p style="font-size:24px;color:#6A7786">5</p></div>
+<aside>The grilling skill is from Matt Pocock’s public skills repo. Its trick is the recommended answer: the client can reply “yes, yes, no” instead of writing paragraphs. Slices whose questions were answered early needed far fewer rewrites.</aside>
+</section>
+<section id="plan" data-transition="fade" style="background:#F9FAFB;color:#15202B;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:3px;color:#1F8A4C">STEPS 2–3 · SYNC ISSUE, PLAN · writes requirements.md, plan.md</p>
+<h2 style="font-family:'Archivo', Arial, sans-serif;font-size:72px;font-weight:800;line-height:1.1">Sort every requirement into three buckets</h2>
+</div>
+<div style="display:flex;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#DCF1E4;border-radius:12px;padding:36px"><h3 style="font-size:40px;font-weight:700;color:#1F6E3D">Decided</h3><p style="font-size:26px;line-height:1.4;color:#15202B">Confirmed in the thread. Goes into Phase 1 and gets built now.</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#F8EAD3;border-radius:12px;padding:36px"><h3 style="font-size:40px;font-weight:700;color:#8A5300">Waiting</h3><p style="font-size:26px;line-height:1.4;color:#15202B">An open question. Goes to Phase 2, with the question ready to post.</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#F7DEDC;border-radius:12px;padding:36px"><h3 style="font-size:40px;font-weight:700;color:#8A2A24">Conflict</h3><p style="font-size:26px;line-height:1.4;color:#15202B">Two sources disagree. Both are cited. The AI never picks one.</p></div>
+</div>
+<p style="font-size:30px;line-height:1.4;color:#4A5868;width:1500px">The plan reads the ticket, the client’s comments, the project rule files and the vendor docs. Every claim cites a source or says “assumption”.</p>
+<p style="font-size:28px;color:#2C56D6;font-weight:600">You decide: settle each conflict and agree what Phase 1 covers.</p>
+<div style="position:absolute;left:128px;bottom:64px;width:1664px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#6A7786">Agility · AI kit</p><p style="font-size:24px;color:#6A7786">6</p></div>
+<aside>Sync issue copies the ticket and the client’s comments into local files and drops noise like screenshots. The plan step then does the sorting. The two phases are what let us keep building while the client took days to answer: Phase 1 is only decided work.</aside>
+</section>
+<section id="implement" data-transition="fade" style="background:#EEF1F4;color:#15202B;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:3px;color:#1F8A4C">STEP 4 · IMPLEMENT · writes code + tests</p>
+<h2 style="font-family:'Archivo', Arial, sans-serif;font-size:72px;font-weight:800;line-height:1.1">Code in the house style, with tests</h2>
+</div>
+<div style="display:grid;grid-template-columns:repeat(2, 1fr);gap:24px">
+<div style="display:flex;flex-direction:column;gap:8px;background:#F9FAFB;border-radius:12px;padding:32px"><h3 style="font-size:32px;font-weight:600">Reads the whole plan first</h3><p style="font-size:26px;line-height:1.4;color:#4A5868">Stops and asks when the plan is unclear or clashes with the code.</p></div>
+<div style="display:flex;flex-direction:column;gap:8px;background:#F9FAFB;border-radius:12px;padding:32px"><h3 style="font-size:32px;font-weight:600">Copies the surrounding style</h3><p style="font-size:26px;line-height:1.4;color:#4A5868">No dead code, no speculative layers, comments only for “why”.</p></div>
+<div style="display:flex;flex-direction:column;gap:8px;background:#F9FAFB;border-radius:12px;padding:32px"><h3 style="font-size:32px;font-weight:600">Aims tests at 95% of branches</h3><p style="font-size:26px;line-height:1.4;color:#4A5868">And names the paths it is not sure are covered.</p></div>
+<div style="display:flex;flex-direction:column;gap:8px;background:#F9FAFB;border-radius:12px;padding:32px"><h3 style="font-size:32px;font-weight:600">Flags calls it won’t make</h3><p style="font-size:26px;line-height:1.4;color:#4A5868">Architecture, ownership and judgment calls come back to you.</p></div>
+</div>
+<p style="font-size:28px;color:#2C56D6;font-weight:600">On our project: a person built, ran the unit tests and called the API via .http, in a second VS Code window (slide 4).</p>
+<div style="position:absolute;left:128px;bottom:64px;width:1664px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#6A7786">Agility · AI kit</p><p style="font-size:24px;color:#6A7786">7</p></div>
+<aside>This step is a command, not a skill: /implement-plan with the plan file. On our project Claude could not run inside the dev container on the VDI, so one VS Code window ran the build and tests and another held Claude; a person moved results between them. If your environment can build, let the AI run them too, but keep the rule that it never claims green without a real run.</aside>
+</section>
+<section id="review" data-transition="fade" style="background:#F9FAFB;color:#15202B;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:3px;color:#1F8A4C">STEPS 5–6 · REVIEW, FIX REVIEW · writes review.md, reply.md</p>
+<h2 style="font-family:'Archivo', Arial, sans-serif;font-size:72px;font-weight:800;line-height:1.1">Review against the rules, not memory</h2>
+</div>
+<div style="display:flex;gap:40px">
+<div style="flex:1;display:flex;flex-direction:column;gap:16px">
+<h3 style="font-size:36px;font-weight:600">Review</h3>
+<p style="font-size:28px;line-height:1.4;color:#4A5868">Re-reads the project’s rule files every run. Read-only; writes one report.</p>
+<div style="display:flex;flex-direction:column;gap:8px">
+<p style="font-size:26px;background:#F7DEDC;padding:12px 20px;border-radius:8px"><b>Critical</b> · a bug or a broken rule</p>
+<p style="font-size:26px;background:#F8EAD3;padding:12px 20px;border-radius:8px"><b>Important</b> · a gap with a workaround</p>
+<p style="font-size:26px;background:#EEF1F4;padding:12px 20px;border-radius:8px"><b>Suggestion</b> · style and wording</p>
+</div>
+<p style="font-size:26px;line-height:1.4;color:#4A5868">Every finding: file, line, what is wrong, the fix.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px">
+<h3 style="font-size:36px;font-weight:600">Fix review</h3>
+<p style="font-size:28px;line-height:1.4;color:#4A5868">For each finding: verify, explain, fix with a test, then one reply line.</p>
+<div style="display:flex;flex-direction:column;gap:8px;background:#EEF1F4;border-left:6px solid #1F8A4C;border-radius:8px;padding:24px">
+<p style="font-size:26px;line-height:1.4"><b>Done:</b> the registration test now covers all four helpers.</p>
+<p style="font-size:26px;line-height:1.4"><b>Not changed:</b> the client already searches parent folders.</p>
+<p style="font-size:26px;line-height:1.4"><b>Still open:</b> waits on the owner’s answer.</p>
+</div>
+</div>
+</div>
+<p style="font-size:28px;color:#2C56D6;font-weight:600">You decide: which findings are real, and approve any change a caller would notice.</p>
+<div style="position:absolute;left:128px;bottom:64px;width:1664px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#6A7786">Agility · AI kit</p><p style="font-size:24px;color:#6A7786">8</p></div>
+<aside>The review skill is strict on purpose: it does not review from memory. Most findings are a line that disagrees with one of the project’s own rule files. The fix-review skill works on any review file, including a teammate’s, and drafts the reply so every finding ends with a reason.</aside>
+</section>
+<section id="openpr" data-transition="fade" style="background:#EEF1F4;color:#15202B;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:3px;color:#1F8A4C">STEP 7 · OPEN PR · writes a draft PR</p>
+<h2 style="font-family:'Archivo', Arial, sans-serif;font-size:72px;font-weight:800;line-height:1.1">A PR description written from the code</h2>
+</div>
+<div style="display:flex;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#F9FAFB;border-top:6px solid #1F8A4C;border-radius:12px;padding:36px"><p style="font-family:'Archivo', Arial, sans-serif;font-size:72px;font-weight:800;line-height:1;color:#1F8A4C">1–3</p><p style="font-size:28px;line-height:1.4;color:#4A5868">sentences on what the branch adds</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#F9FAFB;border-top:6px solid #1F8A4C;border-radius:12px;padding:36px"><p style="font-family:'Archivo', Arial, sans-serif;font-size:72px;font-weight:800;line-height:1;color:#1F8A4C">3–6</p><p style="font-size:28px;line-height:1.4;color:#4A5868">bullets, one per real change</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#F9FAFB;border-top:6px solid #1F8A4C;border-radius:12px;padding:36px"><p style="font-family:'Archivo', Arial, sans-serif;font-size:72px;font-weight:800;line-height:1;color:#1F8A4C">1</p><p style="font-size:28px;line-height:1.4;color:#4A5868">table of new routes: who may call, what is logged</p></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:30px;line-height:1.4"><b>Cut any sentence that would read the same on another PR.</b></p>
+<p style="font-size:30px;line-height:1.4"><b>Never claim tests pass</b> unless they ran in this session. Opens as draft only.</p>
+</div>
+<div style="position:absolute;left:128px;bottom:64px;width:1664px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#6A7786">Agility · AI kit</p><p style="font-size:24px;color:#6A7786">9</p></div>
+<aside>The PR skill reads the diff and the code, not the commit messages, and a small script lists the commits, the stats and any new routes. The rule I like most: cut any sentence that would read the same on a different PR. It kills filler.</aside>
+</section>
+<section id="guards" data-transition="fade" style="background:#F9FAFB;color:#15202B;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:3px;color:#1F8A4C">WHY YOU CAN TRUST THE OUTPUT</p>
+<h2 style="font-family:'Archivo', Arial, sans-serif;font-size:72px;font-weight:800;line-height:1.1">Five rules the skills never break</h2>
+</div>
+<div style="display:flex;flex-direction:column;gap:0px">
+<div style="display:flex;gap:40px;align-items:baseline;border-top:2px solid #CFD7DF;padding:22px 0px"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;font-weight:600;color:#1F8A4C;width:60px">01</p><h3 style="font-size:36px;font-weight:600;width:620px">Cite or say “assumption”</h3><p style="flex:1;font-size:28px;color:#4A5868">No claim in a plan without a source.</p></div>
+<div style="display:flex;gap:40px;align-items:baseline;border-top:2px solid #CFD7DF;padding:22px 0px"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;font-weight:600;color:#1F8A4C;width:60px">02</p><h3 style="font-size:36px;font-weight:600;width:620px">Read the rules, not memory</h3><p style="flex:1;font-size:28px;color:#4A5868">Plan and review re-read the rule files every run.</p></div>
+<div style="display:flex;gap:40px;align-items:baseline;border-top:2px solid #CFD7DF;padding:22px 0px"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;font-weight:600;color:#1F8A4C;width:60px">03</p><h3 style="font-size:36px;font-weight:600;width:620px">Never pick a side</h3><p style="flex:1;font-size:28px;color:#4A5868">Conflicts go to a person to settle.</p></div>
+<div style="display:flex;gap:40px;align-items:baseline;border-top:2px solid #CFD7DF;padding:22px 0px"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;font-weight:600;color:#1F8A4C;width:60px">04</p><h3 style="font-size:36px;font-weight:600;width:620px">Stop on the wrong state</h3><p style="flex:1;font-size:28px;color:#4A5868">Wrong branch, uncommitted work or a missing input stops the skill.</p></div>
+<div style="display:flex;gap:40px;align-items:baseline;border-top:2px solid #CFD7DF;border-bottom:2px solid #CFD7DF;padding:22px 0px"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;font-weight:600;color:#1F8A4C;width:60px">05</p><h3 style="font-size:36px;font-weight:600;width:620px">Never claim green</h3><p style="flex:1;font-size:28px;color:#4A5868">No “tests pass” unless they ran in this session.</p></div>
+</div>
+<div style="position:absolute;left:128px;bottom:64px;width:1664px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#6A7786">Agility · AI kit</p><p style="font-size:24px;color:#6A7786">10</p></div>
+<aside>Each rule is one line in a skill file. Together they are why we could read the AI’s plan or review and trust it enough to act. The most valuable one is never picking a side: when two sources disagree, the AI lists both and stops.</aside>
+</section>
+<section id="missed" data-transition="fade" style="background:#EEF1F4;color:#15202B;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:3px;color:#C2362F">WHAT THE AI MISSED</p>
+<h2 style="font-family:'Archivo', Arial, sans-serif;font-size:72px;font-weight:800;line-height:1.1">The review checked rules, not resource use</h2>
+</div>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#F7DEDC;border-radius:12px;padding:40px">
+<p style="font-family:'Archivo', Arial, sans-serif;font-size:96px;font-weight:800;line-height:1;color:#C2362F">167 hosts</p>
+<p style="font-size:28px;line-height:1.4;color:#15202B">A test helper built a full web host for every test. It passed every review, then ran CI out of memory.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#F8EAD3;border-radius:12px;padding:40px">
+<p style="font-family:'Archivo', Arial, sans-serif;font-size:96px;font-weight:800;line-height:1;color:#8A5300">no number</p>
+<p style="font-size:28px;line-height:1.4;color:#15202B">The implement step aims at 95% coverage but cannot measure it. Nobody recorded the real figure.</p>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:30px;line-height:1.4"><b>Fix 1:</b> add test cost to the review checklist (hosts per test, memory, CI timeouts).</p>
+<p style="font-size:30px;line-height:1.4"><b>Fix 2:</b> record the coverage number at every merge.</p>
+</div>
+<div style="position:absolute;left:128px;bottom:64px;width:1664px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#6A7786">Agility · AI kit</p><p style="font-size:24px;color:#6A7786">11</p></div>
+<aside>Being honest about the limits makes the rest believable. The AI reviewer only checks what its checklist says. Our checklist had no line about test cost, so a helper that built 167 web hosts sailed through. A sibling helper already shared one host; nobody compared them.</aside>
+</section>
+<section id="kinds" data-transition="fade" style="background:#F9FAFB;color:#15202B;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:3px;color:#1F8A4C">CHOOSING THE RIGHT TOOL</p>
+<h2 style="font-family:'Archivo', Arial, sans-serif;font-size:72px;font-weight:800;line-height:1.1">Prompt, command, skill or rules file?</h2>
+</div>
+<table style="font-family:'IBM Plex Sans', Arial, sans-serif;font-size:28px;color:#15202B">
+<tr><th style="width:20%">Use a</th><th style="width:42%">When</th><th style="width:38%">Example</th></tr>
+<tr><td>Prompt</td><td>A one-off for this branch or this day</td><td>A review with extra checks</td></tr>
+<tr><td>Command</td><td>One short job you trigger by name</td><td>/implement-plan &lt;plan&gt;</td></tr>
+<tr><td>Skill</td><td>A repeatable procedure with steps or scripts</td><td>plan-slice, preview</td></tr>
+<tr><td>Rules file</td><td>A fact that is always true; skills read it</td><td>AGENTS.md</td></tr>
+</table>
+<p style="font-size:34px;line-height:1.4;font-weight:600;color:#1F6E3D">Pasted the same prompt three times? Make it a command.</p>
+<div style="position:absolute;left:128px;bottom:64px;width:1664px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#6A7786">Agility · AI kit</p><p style="font-size:24px;color:#6A7786">12</p></div>
+<aside>Most of the kit grew this way. A prompt I pasted three times became a command; a command that needed steps and scripts became a skill; a rule I kept repeating went into the rules file that every skill reads.</aside>
+</section>
+<section id="start" data-transition="fade" style="background:#EEF1F4;color:#15202B;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:3px;color:#1F8A4C">TRY IT ON YOUR NEXT TICKET</p>
+<h2 style="font-family:'Archivo', Arial, sans-serif;font-size:72px;font-weight:800;line-height:1.1">Install in four steps, then one prompt per step</h2>
+</div>
+<div style="display:flex;gap:48px">
+<div style="width:560px;display:flex;flex-direction:column;gap:16px">
+<p style="font-size:28px;line-height:1.4"><b>1.</b> Copy the kit’s .claude folder into your repo.</p>
+<p style="font-size:28px;line-height:1.4"><b>2.</b> Install and log in to the gh CLI.</p>
+<p style="font-size:28px;line-height:1.4"><b>3.</b> Fill the &lt;placeholders&gt;: your rule files and folders.</p>
+<p style="font-size:28px;line-height:1.4"><b>4.</b> Write a rules file the skills can read.</p>
+</div>
+<div style="flex:1;display:flex">
+<table style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#15202B">
+<tr><th style="width:30%">Step</th><th style="width:70%">Prompt</th></tr>
+<tr><td>1 Grill</td><td>/grilling Grill me on ticket &lt;n&gt;</td></tr>
+<tr><td>2 Sync issue</td><td>/sync-issue &lt;n&gt; &lt;area&gt;/&lt;slice&gt;</td></tr>
+<tr><td>3 Plan</td><td>/plan-issue &lt;n&gt; Phase 1: &lt;scope&gt;</td></tr>
+<tr><td>4 Implement</td><td>/implement-plan &lt;slice&gt;/plan.md</td></tr>
+<tr><td>5 Review</td><td>/preview Review this branch vs main</td></tr>
+<tr><td>6 Fix review</td><td>/address-review &lt;review&gt; next</td></tr>
+<tr><td>7 Open PR</td><td>/open-pr main</td></tr>
+</table>
+</div>
+</div>
+<div style="position:absolute;left:128px;bottom:64px;width:1664px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#6A7786">Agility · AI kit</p><p style="font-size:24px;color:#6A7786">13</p></div>
+<aside>You do not need all seven steps on day one. Start with grill on your next ticket; it pays off fastest. Add plan and review once you have a rules file for the skills to read.</aside>
+</section>
+<section id="close" data-transition="fade" style="background:#15202B;color:#EEF1F4;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:space-between">
+<h1 style="font-family:'Archivo', Arial, sans-serif;font-size:160px;font-weight:900;line-height:1;color:#EEF1F4">Questions?</h1>
+<div style="display:flex;gap:48px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;border-left:6px solid #5FCF8C;padding:8px 0px 8px 28px">
+<h3 style="font-size:36px;font-weight:600;color:#5FCF8C">The AI writes</h3>
+<p style="font-size:28px;line-height:1.4;color:#BFCAD6">questions, plans, code, reviews and PR text, all into files.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;border-left:6px solid #86A6FF;padding:8px 0px 8px 28px">
+<h3 style="font-size:36px;font-weight:600;color:#86A6FF">You decide</h3>
+<p style="font-size:28px;line-height:1.4;color:#BFCAD6">at four gates, and you own what ships.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;border-left:6px solid #EEF1F4;padding:8px 0px 8px 28px">
+<h3 style="font-size:36px;font-weight:600;color:#EEF1F4">Get the kit</h3>
+<p style="font-size:28px;line-height:1.4;color:#BFCAD6">Seven skills, one command and a README. Ask me for a copy.</p>
+</div>
+</div>
+<p style="font-size:24px;color:#94A3B2">Grilling skill credit: mattpocock/skills</p>
+<aside>Thanks. One line to remember: the AI writes, you decide. Ask me for the kit and start with the grill step on your next ticket.</aside>
+</section>
+</div>
+<div id="notes"></div>
+<div id="bar"><button id="prev" aria-label="Previous slide">◀</button><span id="count"></span><button id="next" aria-label="Next slide">▶</button><button id="toggleNotes">Notes (N)</button><span>← → to move · F for full screen</span></div>
+<script>
+const slides=[...document.querySelectorAll('#stage > section')];
+let i=0;
+const fromHash=parseInt((location.hash.match(/slide-(\d+)/)||[])[1]||'1',10)-1;
+if(fromHash>=0&&fromHash<slides.length)i=fromHash;
+const notes=document.getElementById('notes');
+function fit(){const s=Math.min(innerWidth/1920,(innerHeight-40)/1080);document.getElementById('stage').style.transform=`translate(-50%,calc(-50% - 20px)) scale(${s})`;}
+function show(n){i=Math.max(0,Math.min(slides.length-1,n));slides.forEach((s,k)=>s.classList.toggle('on',k===i));document.getElementById('count').textContent=`${i+1} / ${slides.length}`;const a=slides[i].querySelector('aside');notes.textContent=a?a.textContent:'(no notes)';history.replaceState(null,'','#slide-'+(i+1));}
+document.getElementById('prev').onclick=()=>show(i-1);
+document.getElementById('next').onclick=()=>show(i+1);
+document.getElementById('toggleNotes').onclick=()=>{notes.style.display=notes.style.display==='block'?'none':'block'};
+addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown')show(i+1);if(e.key==='ArrowLeft'||e.key==='PageUp')show(i-1);if(e.key==='n'||e.key==='N')document.getElementById('toggleNotes').click();if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen().catch(()=>{})}});
+addEventListener('resize',fit);fit();show(i);
+</script>
+</body>
+</html>

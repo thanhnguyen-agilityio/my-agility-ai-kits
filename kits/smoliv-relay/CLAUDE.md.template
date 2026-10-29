@@ -1,0 +1,59 @@
+# <project name>
+
+<one line: what this is>
+
+## Commands
+- Install: `<cmd>`
+- Build: `<cmd>`
+- Test: `<cmd>`
+- Lint/format: `<cmd>`
+
+## Layout
+- `<dir>`: <purpose>
+
+## AI kit
+
+The kit's skills read this section. Fill every `<…>` once; the skills use the same names.
+
+### Folders
+- Docs folder: `<docs folder>` (for example `docs/local`). sync-issue, plan-issue, open-pr and pr-desc write here, one folder per `<area>/<issue>`.
+- Reviews folder: `<reviews folder>` (for example `docs/local/reviews`). preview writes reports here.
+- Requests folder: `<requests folder>` (for example `requests/`). implement-plan adds `.http` files here for new endpoints.
+- Integration folder: `<integration folder>`. Where vendor integrations live, if any.
+
+### Rule files
+The skills read these before planning or reviewing. Remove the rows you do not have.
+- `<rules file>` (for example `AGENTS.md`): design and writing rules for the whole repo.
+- `<service rules file>`: the service's invariants and folder map.
+- `<integration rules file>`: the parts of an integration and the shared files it touches.
+- `<banned APIs file>`: API calls the analyzer rejects.
+- `<docs rules file>`: how docs pages are written.
+- `<acceptance criteria file>`: the criteria every issue must meet.
+
+### API conventions
+- Caller policy: `<caller policy>` (how a route says who may call it). pr-desc fills the Callers column from it.
+- Role policy: `<role policy>` (how a route says which role it needs). pr-desc fills the Role column from it.
+
+### Codebase summary
+<Five to eight lines. preview reads this so it looks for patterns that are really here.>
+- Framework and version: <…>
+- How the code is split: <…>
+- Where routes and services are registered: <…>
+- Data layer, and what it is not: <…>
+- Background work and queues: <…>
+- Validation: <…>
+
+### Project checklist
+<The rules a reviewer keeps repeating, one bullet each, with the rule file it comes from. preview checks every item.>
+- <…>
+
+## Conventions
+- One ticket per branch. Small commits. Always a PR; never push to main.
+- Every change ships with a test. Keep diffs minimal.
+- Never claim tests pass unless they ran in this session.
+- <language and style rules>
+
+## Never
+- Commit or print secrets or `.env`.
+- Merge, or say "done", without running the tests.
+- Add dependencies without asking.
