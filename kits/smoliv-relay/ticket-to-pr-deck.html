@@ -10,6 +10,7 @@ html,body{margin:0;height:100%;background:#0b1117;overflow:hidden;font-family:'I
 #stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:center}
 section{position:absolute;inset:0;width:1920px;height:1080px;box-sizing:border-box;display:none}
 section.on{display:flex}
+#stage > section:not(.on){display:none!important}
 section[style*="display:grid"].on{display:grid}
 section *{box-sizing:border-box}
 h1,h2,h3,p{margin:0}
